@@ -1,0 +1,49 @@
+---
+
+- name: Install dependencies
+  apt: name="{{ item }}" state=latest
+  with_items:
+    - build-essential
+    - libssl-dev
+    - mysql-dev
+  when: ansible_distribution == "Ubuntu"
+
+- name: Install dependencies
+  yum: name="{{ item }}" state=latest
+  with_items:
+    - openssl-devel
+    - mysql-devel
+  when: ansible_distribution == "CentOS"
+
+- name: unarchive ossec tarball to install
+  unarchive: src="ossec-hids-{{ ossec_ver }}.tar.gz" dest=/usr/local/src
+
+- include: install_server_side.yml tags=config_hybrid_server
+
+- include: install_agent_side.yml tags=config_hybrid_agent
+
+- name: copy ossec.conf
+  template: >
+    src=ossec-svr.j2
+    dest="{{ ossec_home }}/etc/ossec.conf"
+    force=yes
+    owner=root
+    group=root
+    mode=0755
+
+- name: copy ossec-slack.sh
+  template: >
+    src=ossec-slack.j2
+    dest="{{ ossec_home }}/active-response/bin/ossec-slack.sh"
+    force=yes
+    owner=root
+    group=root
+    mode=0755
+  when: enable_slack == true
+
+- name: start ossec
+  command: ./ossec-control start chdir="{{ ossec_home }}/bin/"
+  tags:
+    - start_ossec
+
+- include: manager.yml tags=config_manager

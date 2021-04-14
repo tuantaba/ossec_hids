@@ -1,0 +1,5 @@
+---
+
+- hosts: agents
+  roles:
+    - {role: unix_ossec_agent, tags: install_ossec_agent}

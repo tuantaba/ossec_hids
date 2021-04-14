@@ -1,0 +1,7 @@
+# Configurations
+## Alert email
+admin_mail: quanvuminh@vccorp.vn
+admin_smtp: aspmx.l.google.com
+#admin_smtp: gmail-smtp-in.l.google.com
+## Syscheck
+syscheck_freq: 60

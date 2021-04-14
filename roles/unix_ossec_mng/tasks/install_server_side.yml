@@ -1,0 +1,13 @@
+---
+
+- name: modify preloaded-vars for server-side
+  template: >
+    src=preloaded-vars-svr.j2
+    dest="/usr/local/src/ossec-hids-{{ ossec_ver }}/etc/preloaded-vars.conf"
+    force=yes
+    owner=root
+    group=root
+    mode=0755
+
+- name: install ossec server-side
+  shell: ./install.sh chdir="/usr/local/src/ossec-hids-{{ ossec_ver }}/"

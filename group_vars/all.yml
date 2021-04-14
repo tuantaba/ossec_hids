@@ -1,0 +1,16 @@
+# For installation process
+ossec_ver: 2.8.3
+ossec_home: /opt/ossec
+
+# Ossec server management port for authenthication request
+manager_port: 1515
+
+# Slack notification
+enable_slack: false
+slack_user: @tuantaba
+slack_chan: #ossec-notify
+slack_hook: https://hooks.slack.com/services/xxxxxxx/xxxxx/xxxxxxxxx
+slack_alert_level_min: 6
+
+# Update
+is_update: false

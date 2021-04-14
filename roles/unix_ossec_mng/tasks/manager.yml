@@ -1,0 +1,19 @@
+---
+
+- name: copy manager certificates
+  copy: >
+    src="{{ item }}"
+    dest="{{ ossec_home }}/etc"
+    owner=root
+    group=root
+    mode=0400
+  with_items:
+    - sslmanager.cert
+    - sslmanager.key
+
+- name: start authenthication listening from agent
+  command: "./ossec-authd -p {{ manager_port }} >/dev/null 2>&1 &"
+  args:
+    chdir: "{{ ossec_home }}/bin/"
+  async: 99999999999999999999
+  poll: 0

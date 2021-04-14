@@ -1,0 +1,17 @@
+USER_LANGUAGE="en"
+USER_NO_STOP="y"
+USER_INSTALL_TYPE="agent"
+USER_DIR="{{ ossec_home }}/ossec-agent"
+USER_ENABLE_ROOTCHECK="n"
+USER_ENABLE_SYSCHECK="n"
+USER_ENABLE_ACTIVE_RESPONSE="n"
+{% if is_update == false %}
+USER_UPDATE="n"
+{% else %}
+USER_UPDATE="y"
+USER_DELETE_DIR="y"
+{% endif %}
+USER_UPDATE_RULES="n"
+USER_AGENT_SERVER_IP="{{ groups['manager'][0] }}"
+USER_AGENT_CONFIG_PROFILE="generic"
+USER_CLEANINSTALL="y"

@@ -1,0 +1,9 @@
+# Configurations
+## Frequency
+syscheck_freq: 60
+notify_time: 120
+## Monitoring directories
+monit_dirs:
+  - /etc/cron.d
+## Update
+is_update: false

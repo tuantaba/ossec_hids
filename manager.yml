@@ -1,0 +1,5 @@
+---
+
+- hosts: manager
+  roles:
+    - {role: unix_ossec_mng, tags: install_ossec_manager}

@@ -1,0 +1,58 @@
+---
+
+- name: Install dependencies
+  apt: name="{{ item }}" state=latest
+  with_items:
+    - build-essential
+    - libssl-dev
+    - mysql-dev
+  when: ansible_distribution == "Ubuntu"
+
+- name: Install dependencies
+  yum: name="{{ item }}" state=latest
+  with_items:
+    - openssl-devel
+    - mysql-devel
+  when: ansible_distribution == "CentOS"
+
+- name: unarchive ossec tarball to install
+  unarchive: src="ossec-hids-{{ ossec_ver }}.tar.gz" dest=/usr/local/src
+
+- name: modify preloaded-vars for agent-side
+  template: >
+    src=preloaded-vars-agent.j2 dest="/usr/local/src/ossec-hids-{{ ossec_ver }}/etc/preloaded-vars.conf"
+    force=yes
+    owner=root
+    group=root
+    mode=0755
+
+- name: install ossec
+  shell: ./install.sh chdir="/usr/local/src/ossec-hids-{{ ossec_ver }}/"
+
+- name: copy ossec.conf
+  template: >
+    src=ossec-agent.j2 dest="{{ ossec_home }}/etc/ossec.conf"
+    force=yes
+    owner=root
+    group=root
+    mode=0755
+
+- name: copy ossec-slack.sh
+  template: >
+    src=ossec-slack.j2
+    dest="{{ ossec_home }}/active-response/bin/ossec-slack.sh"
+    force=yes
+    owner=root
+    group=root
+    mode=0755
+  when: enable_slack == true
+
+- name: request agent key from server
+  command: "./agent-auth -m {{ groups['manager'][0] }} -p {{ manager_port }} -A {{ inventory_hostname }}"
+  args:
+    chdir: "{{ ossec_home }}/bin/"
+  register: req_key
+
+- name: start ossec
+  command: ./ossec-control start chdir="{{ ossec_home }}/bin/"
+  when: req_key.stdout.find("Valid key created") == 1
