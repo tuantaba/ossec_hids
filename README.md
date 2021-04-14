@@ -3,7 +3,6 @@
 OSSEC cung cấp chức năng nhận diện nguy cơ từ log hệ thống, phát hiện rootkit, phát hiện
 thay đổi file cấu hình hệ thống.  
 
-![Ossec Architecture](http://ossec.github.io/_images/ossec-arch.jpg)
 ### Yêu cầu
 - Ossec server/manager đã cài đặt
 - Windows Server 2008, 2012
